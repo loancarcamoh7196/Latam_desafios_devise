@@ -1,10 +1,10 @@
 class HistoriesController < ApplicationController
   before_action :set_history, only: [:show, :edit, :update, :destroy]
-
+  before_action :authenticate_member!, only: %i[show new edit create update destroy]
   # GET /histories
   # GET /histories.json
   def index
-    @histories = History.all
+    @histories = History.where(user: current_user)
   end
 
   # GET /histories/1
@@ -25,6 +25,7 @@ class HistoriesController < ApplicationController
   # POST /histories.json
   def create
     @history = History.new(history_params)
+    @history.user_id = current_user.id 
 
     respond_to do |format|
       if @history.save
@@ -69,6 +70,6 @@ class HistoriesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def history_params
-      params.require(:history).permit(:title, :picture, :content, :remote_picture_url)
+      params.require(:history).permit(:title, :picture, :content, :remote_picture_url, :user_id)
     end
 end

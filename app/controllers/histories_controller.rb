@@ -1,10 +1,11 @@
 class HistoriesController < ApplicationController
   before_action :set_history, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_member!, only: %i[show new edit create update destroy]
+  before_action :authenticate_user!, only: %i[show new edit create update destroy]
+  
   # GET /histories
   # GET /histories.json
   def index
-    @histories = History.where(user: current_user)
+    @histories = History.all
   end
 
   # GET /histories/1
